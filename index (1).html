@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ABCStudio Status</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #121212; color: #fff; padding: 2rem; line-height: 1.6; }
+  h1, h2 { text-align: center; }
+  .server, .problem { padding: 1rem; margin: 1rem 0; border-radius: 8px; }
+  .online { background: #0f0; color: #000; }
+  .offline { background: #f00; color: #fff; }
+  .investigation { background: #ff9800; color: #000; }
+  .monitoring { background: #ffc107; color: #000; }
+  .news { background: #1e1e1e; padding: 1rem; margin: 2rem 0; border-radius: 8px; }
+  .news h3 { margin-top: 0; }
+</style>
+</head>
+<body>
+<h1>ABCStudio Server Status</h1>
+
+<div id="servers"></div>
+
+<h2>Current Problems</h2>
+<div id="problems"></div>
+
+<div class="news">
+  <h3>ABCStudio News</h3>
+  <p>Welcome to ABCStudio! Our team is dedicated to developing games, software, and innovative projects. Over the past few months, we have been working hard to improve our servers and infrastructure.</p>
+  <p>One of the issues we faced was an <strong>Internal Server Error</strong> that occurred at 5:42 AM, causing a short downtime of our services. Our team is currently investigating this problem and implementing preventive measures to avoid similar issues in the future. We also experienced minor delays with login and file uploads, but these are now being actively monitored.</p>
+  <p>Our goal is to keep ABCStudio servers <strong>Online</strong> and stable at all times. This status page allows you to check the real-time status of our services.</p>
+</div>
+
+<script>
+// JSON in JS variable with Local Server added
+const data = {
+  "servers": [
+    {"name": "Game Server", "status": "Online"},
+    {"name": "Database", "status": "Online"},
+    {"name": "Web API", "status": "Online"},
+    {"name": "Authentication Server", "status": "Online"},
+    {"name": "File Storage", "status": "Online"},
+    {"name": "Mail Server", "status": "Online"},
+    {"name": "Backup Server", "status": "Online"},
+    {"name": "Local Server", "status": "Online"}  // added Local Server
+  ],
+  "problems": [
+    {
+      "issue": "Internal Server Error",
+      "time": "5:42 AM",
+      "status": "Investigation",
+      "reports": 32
+    },
+    {
+      "issue": "Login delays",
+      "time": "4:15 AM",
+      "status": "Monitoring",
+      "reports": 12
+    },
+    {
+      "issue": "File upload slow",
+      "time": "3:50 AM",
+      "status": "Monitoring",
+      "reports": 7
+    }
+  ]
+};
+
+function renderStatus() {
+  const serversDiv = document.getElementById('servers');
+  serversDiv.innerHTML = '';
+  data.servers.forEach(s => {
+    const div = document.createElement('div');
+    div.className = 'server ' + (s.status.toLowerCase() === 'online' ? 'online' : 'offline');
+    div.textContent = `${s.name} — ${s.status}`;
+    serversDiv.appendChild(div);
+  });
+
+  const problemsDiv = document.getElementById('problems');
+  problemsDiv.innerHTML = '';
+  data.problems.forEach(p => {
+    const div = document.createElement('div');
+    let cls = '';
+    if(p.status.toLowerCase() === 'investigation') cls = 'investigation';
+    else if(p.status.toLowerCase() === 'monitoring') cls = 'monitoring';
+    else cls = 'offline';
+    div.className = 'problem ' + cls;
+    div.textContent = `${p.issue} at ${p.time} — ${p.status} (${p.reports} reports)`;
+    problemsDiv.appendChild(div);
+  });
+}
+
+// render immediately and refresh every 10 seconds
+renderStatus();
+setInterval(renderStatus, 10000);
+</script>
+</body>
+</html>
